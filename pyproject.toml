@@ -1,0 +1,33 @@
+[project]
+name = "blue-chatbot"
+version = "0.1.0"
+description = "FAQ 목록을 근거로 답하는 챗봇 API"
+readme = "README.md"
+authors = [
+    { name = "ljy", email = "jun0@naddle.net" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "anthropic>=1.4.0",
+    "fastapi>=0.141.1",
+    "pydantic-settings>=2.15.0",
+    "pyyaml>=6.0.3",
+    "uvicorn>=0.52.4",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.1,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.1.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "smoke: 실제 Claude API를 호출한다. 비용이 발생하므로 기본 실행에서 제외된다",
+]
+addopts = "-m 'not smoke'"
