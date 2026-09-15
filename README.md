@@ -45,12 +45,14 @@ src/blue_chatbot/
 | 이름 | 기본값 | 설명 |
 |---|---|---|
 | `FAQ_PATH` | `data/faq.yaml` | FAQ 파일 경로 |
-| `CLAUDE_MODEL` | `claude-opus-5` | 사용할 모델 |
+| `CLAUDE_MODEL` | `claude-sonnet-5` | 사용할 모델 |
 | `MAX_TOKENS` | `16000` | 응답 토큰 상한 |
-| `EFFORT` | `low` | 추론 깊이 |
+| `EFFORT` | `low` | 추론 깊이. 빈 값이면 파라미터를 보내지 않는다 |
+| `ANTHROPIC_API_KEY` | 없음 | Claude API 키 |
 
-`ANTHROPIC_API_KEY`는 설정에 두지 않는다. Anthropic SDK가 환경변수와
-`ant auth login` 프로필을 직접 읽기 때문이다.
+`ANTHROPIC_API_KEY`는 넣으면 그 값으로 클라이언트를 만들고, 비워 두면
+Anthropic SDK가 환경변수와 `ant auth login` 프로필을 직접 읽는다.
+`SecretStr`이라 로그나 `model_dump()`에 원문이 찍히지 않는다.
 
 ## 테스트
 

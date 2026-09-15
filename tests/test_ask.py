@@ -1,5 +1,6 @@
 from types import SimpleNamespace
 
+import anthropic
 import pytest
 
 from blue_chatbot.configs.core import config
@@ -80,7 +81,9 @@ def test_구조화_출력_파싱에_실패하면_고정_문구를_돌려준다(c
     assert "파싱 실패" in caplog.text
 
 
-def test_호출_파라미터가_설정을_따른다():
+def test_호출_파라미터가_설정을_따른다(monkeypatch):
+    # 로컬 .env의 EFFORT에 좌우되지 않도록 값을 고정한다.
+    monkeypatch.setattr(config, "effort", "low")
     parsed = Answer(content="답", matched_id="refund")
     client = FakeClient(parsed)
 
@@ -94,3 +97,14 @@ def test_호출_파라미터가_설정을_따른다():
     assert kwargs["messages"] == [{"role": "user", "content": "환불 되나요?"}]
     assert "thinking" not in kwargs
     assert "refund" in kwargs["system"]
+
+
+def test_effort가_비면_output_config를_보내지_않는다(monkeypatch):
+    # effort를 지원하지 않는 모델에 이 파라미터를 넘기면 400이 난다.
+    # Omit은 SDK가 요청 본문에서 파라미터를 빼는 센티널이다.
+    monkeypatch.setattr(config, "effort", None)
+    client = FakeClient(Answer(content="답", matched_id="refund"))
+
+    answer(client, FAQS, "환불 되나요?")
+
+    assert isinstance(client.calls[0]["output_config"], anthropic.Omit)

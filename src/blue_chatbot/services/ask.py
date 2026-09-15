@@ -1,6 +1,7 @@
 import logging
 
 import anthropic
+from anthropic.types import OutputConfigParam
 from pydantic import BaseModel
 
 from blue_chatbot.configs.core import config
@@ -13,6 +14,12 @@ logger = logging.getLogger(__name__)
 class Answer(BaseModel):
     content: str
     matched_id: str | None = None
+
+
+def _output_config() -> OutputConfigParam | anthropic.Omit:
+    if not config.effort:
+        return anthropic.omit
+    return {"effort": config.effort}
 
 
 def _fallback() -> Answer:
@@ -33,7 +40,7 @@ def answer(
     message = client.messages.parse(
         model=config.claude_model,
         max_tokens=config.max_tokens,
-        output_config={"effort": config.effort},
+        output_config=_output_config(),
         system=build_prompt_system(faqs),
         messages=[{"role": "user", "content": question}],
         output_format=Answer,

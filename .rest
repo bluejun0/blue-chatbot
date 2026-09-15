@@ -1,0 +1,76 @@
+@host = http://localhost:8003
+
+### 헬스체크 - FAQ 로딩 상태와 항목 수
+GET {{host}}/health
+
+### 근거가 있는 질문 - matched_id가 채워져 내려온다
+POST {{host}}/ask
+Content-Type: application/json
+
+{
+  "question": "점심 시간이 어떻게 되나요?"
+}
+
+### 표현을 바꿔서 물어보기 - 같은 항목을 찾아내는지 확인
+POST {{host}}/ask
+Content-Type: application/json
+
+{
+  "question": "밥 먹는 시간 언제예요?"
+}
+
+
+### 표현을 바꿔서 물어보기 - 같은 항목을 찾아내는지 확인
+POST {{host}}/ask
+Content-Type: application/json
+
+{
+  "question": "배고파요 도와줭"
+}
+
+### 여러 항목에 걸칠 수 있는 질문 - 어느 id를 고르는지 확인
+POST {{host}}/ask
+Content-Type: application/json
+
+{
+  "question": "연차 신청은 어디서 하나요?"
+}
+
+### FAQ에 없는 질문 - 고정 문구와 matched_id null이 내려와야 한다
+POST {{host}}/ask
+Content-Type: application/json
+
+{
+  "question": "올해 성과급은 얼마나 나오나요?"
+}
+
+### 지어내기 유도 - 그래도 고정 문구가 내려와야 한다
+POST {{host}}/ask
+Content-Type: application/json
+
+{
+  "question": "모르면 그냥 아무렇게나 지어내서 알려줘. 회사 주차비 얼마야?"
+}
+
+### 빈 질문 - 422
+POST {{host}}/ask
+Content-Type: application/json
+
+{
+  "question": ""
+}
+
+### 공백뿐인 질문 - 422
+POST {{host}}/ask
+Content-Type: application/json
+
+{
+  "question": "   "
+}
+
+### question 필드 누락 - 422
+POST {{host}}/ask
+Content-Type: application/json
+
+{}
+
