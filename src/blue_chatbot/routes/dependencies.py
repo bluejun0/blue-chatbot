@@ -1,21 +1,19 @@
-import anthropic
 from fastapi import Request
 
-from blue_chatbot.configs.core import config
+from blue_chatbot.services import anthropic_model
 from blue_chatbot.services.faq import FaqEntry
+from blue_chatbot.services.model import ModelClient
 
-_client: anthropic.Anthropic | None = None
+_model: ModelClient | None = None
 
 
 def get_faq(request: Request) -> list[FaqEntry]:
     return request.app.state.faq
 
 
-def get_client() -> anthropic.Anthropic:
-    global _client
-    if _client is None:
-        key = config.anthropic_api_key
-        _client = anthropic.Anthropic(
-            api_key=key.get_secret_value() if key else None
-        )
-    return _client
+def get_model() -> ModelClient:
+    """구현체를 고르는 유일한 자리. 제공자를 바꾸면 이 한 줄만 바뀐다."""
+    global _model
+    if _model is None:
+        _model = anthropic_model.build_from_config()
+    return _model

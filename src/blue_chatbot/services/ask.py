@@ -1,25 +1,13 @@
-import logging
-
-import anthropic
-from anthropic.types import OutputConfigParam
 from pydantic import BaseModel
 
-from blue_chatbot.configs.core import config
 from blue_chatbot.services.faq import FaqEntry
+from blue_chatbot.services.model import Message, ModelClient
 from blue_chatbot.services.prompt import build_prompt_system
-
-logger = logging.getLogger(__name__)
 
 
 class Answer(BaseModel):
     content: str
     matched_id: str | None = None
-
-
-def _output_config() -> OutputConfigParam | anthropic.Omit:
-    if not config.effort:
-        return anthropic.omit
-    return {"effort": config.effort}
 
 
 def _fallback() -> Answer:
@@ -35,23 +23,16 @@ def _validate_answer(raw: Answer, faq: list[FaqEntry]) -> Answer:
 
 
 def answer(
-    client: anthropic.Anthropic, faqs: list[FaqEntry], question: str
+    model: ModelClient, faqs: list[FaqEntry], messages: list[Message]
 ) -> Answer:
-    message = client.messages.parse(
-        model=config.claude_model,
-        max_tokens=config.max_tokens,
-        output_config=_output_config(),
+    """FAQ를 근거로 답한다. 근거가 없으면 고정 문구로 대체한다."""
+    raw = model.generate(
         system=build_prompt_system(faqs),
-        messages=[{"role": "user", "content": question}],
+        messages=messages,
         output_format=Answer,
     )
 
-    if message.stop_reason == "refusal":
+    if raw is None:
         return _fallback()
 
-    if message.parsed_output is None:
-        # TODO: 502 예외를 던져야 하는데, 구조를 확장해야 해서 그대로 둔다.
-        logger.warning("구조화 출력 파싱 실패 (stop_reason=%s)", message.stop_reason)
-        return _fallback()
-
-    return _validate_answer(message.parsed_output, faqs)
+    return _validate_answer(raw, faqs)

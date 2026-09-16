@@ -1,11 +1,6 @@
-from types import SimpleNamespace
-
-import anthropic
-import pytest
-
-from blue_chatbot.configs.core import config
 from blue_chatbot.services.ask import Answer, _validate_answer, answer
 from blue_chatbot.services.faq import FaqEntry
+from blue_chatbot.services.model import Message
 
 FAQS = [
     FaqEntry(id="refund", question="환불 되나요?", answer="7일 이내 가능합니다."),
@@ -13,18 +8,22 @@ FAQS = [
 FALLBACK = "질문에 알맞은 대답을 찾을 수 없습니다."
 
 
-class FakeClient:
-    """messages.parse만 흉내내는 가짜 Anthropic 클라이언트."""
+class FakeModel:
+    """모델 경계만 흉내낸다. 어떤 SDK도 알지 않는다."""
 
-    def __init__(self, parsed: Answer | None, stop_reason: str = "end_turn"):
-        message = SimpleNamespace(parsed_output=parsed, stop_reason=stop_reason)
+    def __init__(self, result: Answer | None):
+        self._result = result
         self.calls: list[dict] = []
 
-        def parse(**kwargs):
-            self.calls.append(kwargs)
-            return message
+    def generate(self, *, system, messages, output_format):
+        self.calls.append(
+            {"system": system, "messages": messages, "output_format": output_format}
+        )
+        return self._result
 
-        self.messages = SimpleNamespace(parse=parse)
+
+def ask(model, question: str = "환불 되나요?") -> Answer:
+    return answer(model, FAQS, [Message(role="user", content=question)])
 
 
 # --- _validate_answer: 근거 검증 규칙 -------------------------------------
@@ -51,60 +50,42 @@ def test_존재하지_않는_matched_id면_거부한다():
     assert result.matched_id is None
 
 
-# --- answer: 호출과 예외 경로 ---------------------------------------------
+# --- answer: 경계 위에서의 동작 -------------------------------------------
 
 
 def test_검증을_통과한_응답을_그대로_돌려준다():
     parsed = Answer(content="7일 이내 가능합니다.", matched_id="refund")
 
-    assert answer(FakeClient(parsed), FAQS, "환불 되나요?") == parsed
+    assert ask(FakeModel(parsed)) == parsed
 
 
 def test_지어낸_matched_id는_고정_문구로_바뀐다():
     parsed = Answer(content="지어낸 답", matched_id="없는-id")
 
-    assert answer(FakeClient(parsed), FAQS, "배송 문의").content == FALLBACK
+    assert ask(FakeModel(parsed), "배송 문의").content == FALLBACK
 
 
-def test_refusal이면_고정_문구를_돌려준다():
-    parsed = Answer(content="무언가", matched_id="refund")
-
-    result = answer(FakeClient(parsed, stop_reason="refusal"), FAQS, "무언가")
-
-    assert result.content == FALLBACK
+def test_모델이_쓸_만한_출력을_못_주면_고정_문구를_돌려준다():
+    assert ask(FakeModel(None)).content == FALLBACK
 
 
-def test_구조화_출력_파싱에_실패하면_고정_문구를_돌려준다(caplog):
-    result = answer(FakeClient(None), FAQS, "무언가")
+def test_FAQ를_시스템_프롬프트로_넘긴다():
+    model = FakeModel(Answer(content="답", matched_id="refund"))
 
-    assert result.content == FALLBACK
-    assert "파싱 실패" in caplog.text
+    ask(model)
 
-
-def test_호출_파라미터가_설정을_따른다(monkeypatch):
-    # 로컬 .env의 EFFORT에 좌우되지 않도록 값을 고정한다.
-    monkeypatch.setattr(config, "effort", "low")
-    parsed = Answer(content="답", matched_id="refund")
-    client = FakeClient(parsed)
-
-    answer(client, FAQS, "환불 되나요?")
-
-    kwargs = client.calls[0]
-    assert kwargs["model"] == config.claude_model
-    assert kwargs["max_tokens"] == config.max_tokens
-    assert kwargs["output_config"] == {"effort": config.effort}
-    assert kwargs["output_format"] is Answer
-    assert kwargs["messages"] == [{"role": "user", "content": "환불 되나요?"}]
-    assert "thinking" not in kwargs
-    assert "refund" in kwargs["system"]
+    assert "refund" in model.calls[0]["system"]
 
 
-def test_effort가_비면_output_config를_보내지_않는다(monkeypatch):
-    # effort를 지원하지 않는 모델에 이 파라미터를 넘기면 400이 난다.
-    # Omit은 SDK가 요청 본문에서 파라미터를 빼는 센티널이다.
-    monkeypatch.setattr(config, "effort", None)
-    client = FakeClient(Answer(content="답", matched_id="refund"))
+def test_발화_목록과_출력_형식을_그대로_넘긴다():
+    model = FakeModel(Answer(content="답", matched_id="refund"))
+    messages = [
+        Message(role="user", content="환불 되나요?"),
+        Message(role="assistant", content="7일 이내 가능합니다."),
+        Message(role="user", content="배송은요?"),
+    ]
 
-    answer(client, FAQS, "환불 되나요?")
+    answer(model, FAQS, messages)
 
-    assert isinstance(client.calls[0]["output_config"], anthropic.Omit)
+    assert model.calls[0]["messages"] == messages
+    assert model.calls[0]["output_format"] is Answer
