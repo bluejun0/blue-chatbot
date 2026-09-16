@@ -6,9 +6,9 @@ from blue_chatbot.routes.dependencies import get_faq, get_model
 from blue_chatbot.services.ask import Answer
 from blue_chatbot.services.faq import FaqEntry
 from blue_chatbot.services.model import (
-    ModelFailed,
-    ModelRateLimited,
-    ModelUnreachable,
+    ModelRequestError,
+    ModelRateLimitError,
+    ModelUnreachableError,
     ModelUpstreamError,
 )
 
@@ -85,7 +85,7 @@ def test_질문_앞뒤_공백은_제거된다(client):
 
 
 def test_요청량_초과면_429다(client):
-    use(FakeModel(error=ModelRateLimited(retry_after=30)))
+    use(FakeModel(error=ModelRateLimitError(retry_after=30)))
 
     response = client.post("/ask", json={"question": "환불 되나요?"})
 
@@ -94,7 +94,7 @@ def test_요청량_초과면_429다(client):
 
 
 def test_모델에_닿지_못하면_503이다(client):
-    use(FakeModel(error=ModelUnreachable("연결 실패")))
+    use(FakeModel(error=ModelUnreachableError("연결 실패")))
 
     assert client.post("/ask", json={"question": "환불 되나요?"}).status_code == 503
 
@@ -106,7 +106,7 @@ def test_제공자_오류면_502다(client):
 
 
 def test_설정_오류면_500이고_원인을_노출하지_않는다(client):
-    use(FakeModel(error=ModelFailed("api key sk-ant-verysecret is invalid")))
+    use(FakeModel(error=ModelRequestError("api key sk-ant-verysecret is invalid")))
 
     response = client.post("/ask", json={"question": "환불 되나요?"})
 

@@ -10,9 +10,9 @@ from pydantic import BaseModel
 from blue_chatbot.configs.core import config
 from blue_chatbot.services.model import (
     Message,
-    ModelFailed,
-    ModelRateLimited,
-    ModelUnreachable,
+    ModelRequestError,
+    ModelRateLimitError,
+    ModelUnreachableError,
     ModelUpstreamError,
 )
 
@@ -46,13 +46,13 @@ class AnthropicModelClient:
             )
         except anthropic.RateLimitError as exc:
             retry_after = int(exc.response.headers.get("retry-after", "60"))
-            raise ModelRateLimited(retry_after) from exc
+            raise ModelRateLimitError(retry_after) from exc
         except (anthropic.APIConnectionError, anthropic.APITimeoutError) as exc:
-            raise ModelUnreachable(str(exc)) from exc
+            raise ModelUnreachableError(str(exc)) from exc
         except anthropic.APIStatusError as exc:
             if exc.status_code >= 500:
                 raise ModelUpstreamError(str(exc)) from exc
-            raise ModelFailed(str(exc)) from exc
+            raise ModelRequestError(str(exc)) from exc
 
         if message.stop_reason == "refusal":
             return None

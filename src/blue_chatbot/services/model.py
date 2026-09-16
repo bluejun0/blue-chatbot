@@ -19,7 +19,7 @@ class ModelError(Exception):
     """모델 호출 실패."""
 
 
-class ModelRateLimited(ModelError):
+class ModelRateLimitError(ModelError):
     """요청량을 초과했다. retry_after 뒤에 다시 시도할 수 있다."""
 
     def __init__(self, retry_after: int):
@@ -27,7 +27,7 @@ class ModelRateLimited(ModelError):
         super().__init__(f"요청량 초과. {retry_after}초 후 재시도")
 
 
-class ModelUnreachable(ModelError):
+class ModelUnreachableError(ModelError):
     """모델에 닿지 못했다. 연결 실패나 타임아웃. 재시도할 수 있다."""
 
 
@@ -35,7 +35,7 @@ class ModelUpstreamError(ModelError):
     """모델에 닿았지만 제공자 쪽에서 실패했다."""
 
 
-class ModelFailed(ModelError):
+class ModelRequestError(ModelError):
     """설정이나 요청이 잘못됐다. 그대로 재시도해도 소용없다."""
 
 

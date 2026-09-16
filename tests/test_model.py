@@ -8,9 +8,9 @@ from blue_chatbot.configs.core import config
 from blue_chatbot.services.anthropic_model import AnthropicModelClient
 from blue_chatbot.services.model import (
     Message,
-    ModelFailed,
-    ModelRateLimited,
-    ModelUnreachable,
+    ModelRequestError,
+    ModelRateLimitError,
+    ModelUnreachableError,
     ModelUpstreamError,
 )
 
@@ -41,10 +41,10 @@ def rate_limit_error(retry_after: str) -> anthropic.RateLimitError:
     return anthropic.RateLimitError("rate limited", response=response, body=None)
 
 
-def test_SDK의_요청량_초과를_ModelRateLimited로_번역한다():
+def test_SDK의_요청량_초과를_ModelRateLimitError로_번역한다():
     client = AnthropicModelClient(fake_sdk(error=rate_limit_error("30")))
 
-    with pytest.raises(ModelRateLimited) as caught:
+    with pytest.raises(ModelRateLimitError) as caught:
         client.generate(
             system="지시",
             messages=[Message(role="user", content="질문")],
@@ -69,17 +69,17 @@ def call(client):
     )
 
 
-def test_연결_실패를_ModelUnreachable로_번역한다():
+def test_연결_실패를_ModelUnreachableError로_번역한다():
     client = AnthropicModelClient(fake_sdk(error=anthropic.APIConnectionError(request=None)))
 
-    with pytest.raises(ModelUnreachable):
+    with pytest.raises(ModelUnreachableError):
         call(client)
 
 
-def test_타임아웃을_ModelUnreachable로_번역한다():
+def test_타임아웃을_ModelUnreachableError로_번역한다():
     client = AnthropicModelClient(fake_sdk(error=anthropic.APITimeoutError(request=None)))
 
-    with pytest.raises(ModelUnreachable):
+    with pytest.raises(ModelUnreachableError):
         call(client)
 
 
@@ -91,19 +91,19 @@ def test_제공자_5xx를_ModelUpstreamError로_번역한다():
         call(client)
 
 
-def test_인증_오류를_ModelFailed로_번역한다():
+def test_인증_오류를_ModelRequestError로_번역한다():
     error = status_error(anthropic.AuthenticationError, 401, "bad key")
     client = AnthropicModelClient(fake_sdk(error=error))
 
-    with pytest.raises(ModelFailed):
+    with pytest.raises(ModelRequestError):
         call(client)
 
 
-def test_제공자_4xx를_ModelFailed로_번역한다():
+def test_제공자_4xx를_ModelRequestError로_번역한다():
     error = status_error(anthropic.APIStatusError, 400, "bad request")
     client = AnthropicModelClient(fake_sdk(error=error))
 
-    with pytest.raises(ModelFailed):
+    with pytest.raises(ModelRequestError):
         call(client)
 
 
