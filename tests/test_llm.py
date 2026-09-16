@@ -5,13 +5,13 @@ import pytest
 from pydantic import BaseModel
 
 from blue_chatbot.configs.core import config
-from blue_chatbot.services.anthropic_model import AnthropicModelClient
-from blue_chatbot.services.model import (
+from blue_chatbot.llm.anthropic_llm import AnthropicLLM
+from blue_chatbot.services.llm import (
     Message,
-    ModelRequestError,
-    ModelRateLimitError,
-    ModelUnreachableError,
-    ModelUpstreamError,
+    LLMRequestError,
+    LLMRateLimitError,
+    LLMUnreachableError,
+    LLMUpstreamError,
 )
 
 
@@ -41,10 +41,10 @@ def rate_limit_error(retry_after: str) -> anthropic.RateLimitError:
     return anthropic.RateLimitError("rate limited", response=response, body=None)
 
 
-def test_SDK의_요청량_초과를_ModelRateLimitError로_번역한다():
-    client = AnthropicModelClient(fake_sdk(error=rate_limit_error("30")))
+def test_SDK의_요청량_초과를_LLMRateLimitError로_번역한다():
+    client = AnthropicLLM(fake_sdk(error=rate_limit_error("30")))
 
-    with pytest.raises(ModelRateLimitError) as caught:
+    with pytest.raises(LLMRateLimitError) as caught:
         client.generate(
             system="지시",
             messages=[Message(role="user", content="질문")],
@@ -69,59 +69,59 @@ def call(client):
     )
 
 
-def test_연결_실패를_ModelUnreachableError로_번역한다():
-    client = AnthropicModelClient(fake_sdk(error=anthropic.APIConnectionError(request=None)))
+def test_연결_실패를_LLMUnreachableError로_번역한다():
+    client = AnthropicLLM(fake_sdk(error=anthropic.APIConnectionError(request=None)))
 
-    with pytest.raises(ModelUnreachableError):
+    with pytest.raises(LLMUnreachableError):
         call(client)
 
 
-def test_타임아웃을_ModelUnreachableError로_번역한다():
-    client = AnthropicModelClient(fake_sdk(error=anthropic.APITimeoutError(request=None)))
+def test_타임아웃을_LLMUnreachableError로_번역한다():
+    client = AnthropicLLM(fake_sdk(error=anthropic.APITimeoutError(request=None)))
 
-    with pytest.raises(ModelUnreachableError):
+    with pytest.raises(LLMUnreachableError):
         call(client)
 
 
-def test_제공자_5xx를_ModelUpstreamError로_번역한다():
+def test_제공자_5xx를_LLMUpstreamError로_번역한다():
     error = status_error(anthropic.APIStatusError, 529, "overloaded")
-    client = AnthropicModelClient(fake_sdk(error=error))
+    client = AnthropicLLM(fake_sdk(error=error))
 
-    with pytest.raises(ModelUpstreamError):
+    with pytest.raises(LLMUpstreamError):
         call(client)
 
 
-def test_인증_오류를_ModelRequestError로_번역한다():
+def test_인증_오류를_LLMRequestError로_번역한다():
     error = status_error(anthropic.AuthenticationError, 401, "bad key")
-    client = AnthropicModelClient(fake_sdk(error=error))
+    client = AnthropicLLM(fake_sdk(error=error))
 
-    with pytest.raises(ModelRequestError):
+    with pytest.raises(LLMRequestError):
         call(client)
 
 
-def test_제공자_4xx를_ModelRequestError로_번역한다():
+def test_제공자_4xx를_LLMRequestError로_번역한다():
     error = status_error(anthropic.APIStatusError, 400, "bad request")
-    client = AnthropicModelClient(fake_sdk(error=error))
+    client = AnthropicLLM(fake_sdk(error=error))
 
-    with pytest.raises(ModelRequestError):
+    with pytest.raises(LLMRequestError):
         call(client)
 
 
 def test_파싱된_결과를_그대로_돌려준다():
     reply = Reply(content="답변")
-    client = AnthropicModelClient(fake_sdk(parsed=reply))
+    client = AnthropicLLM(fake_sdk(parsed=reply))
 
     assert call(client) == reply
 
 
 def test_refusal이면_None을_돌려준다():
-    client = AnthropicModelClient(fake_sdk(parsed=Reply(content="무언가"), stop_reason="refusal"))
+    client = AnthropicLLM(fake_sdk(parsed=Reply(content="무언가"), stop_reason="refusal"))
 
     assert call(client) is None
 
 
 def test_구조화_출력_파싱에_실패하면_None을_돌려준다(caplog):
-    client = AnthropicModelClient(fake_sdk(parsed=None))
+    client = AnthropicLLM(fake_sdk(parsed=None))
 
     assert call(client) is None
     assert "파싱 실패" in caplog.text
@@ -132,7 +132,7 @@ def test_호출_파라미터가_설정을_따른다(monkeypatch):
     monkeypatch.setattr(config, "effort", "low")
     sdk = fake_sdk(parsed=Reply(content="답"))
 
-    AnthropicModelClient(sdk).generate(
+    AnthropicLLM(sdk).generate(
         system="지시",
         messages=[Message(role="user", content="질문")],
         output_format=Reply,
@@ -154,7 +154,7 @@ def test_effort가_비면_output_config를_보내지_않는다(monkeypatch):
     monkeypatch.setattr(config, "effort", None)
     sdk = fake_sdk(parsed=Reply(content="답"))
 
-    AnthropicModelClient(sdk).generate(
+    AnthropicLLM(sdk).generate(
         system="지시",
         messages=[Message(role="user", content="질문")],
         output_format=Reply,
@@ -169,7 +169,7 @@ def test_경계_밖에서는_anthropic_SDK를_모른다():
     from pathlib import Path
 
     root = Path(__file__).resolve().parent.parent / "src" / "blue_chatbot"
-    boundary = root / "services" / "anthropic_model.py"
+    boundary = root / "llm" / "anthropic_llm.py"
     importing = re.compile(r"^\s*(?:import anthropic|from anthropic)", re.MULTILINE)
 
     offenders = sorted(

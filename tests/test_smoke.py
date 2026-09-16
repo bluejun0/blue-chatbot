@@ -7,10 +7,10 @@ from pathlib import Path
 
 import pytest
 
-from blue_chatbot.services.anthropic_model import build_from_config
+from blue_chatbot.llm.anthropic_llm import build_from_config
 from blue_chatbot.services.ask import answer
 from blue_chatbot.services.faq import load
-from blue_chatbot.services.model import Message
+from blue_chatbot.services.llm import Message
 
 
 @pytest.fixture(scope="module")

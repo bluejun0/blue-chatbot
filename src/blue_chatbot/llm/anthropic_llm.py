@@ -8,12 +8,12 @@ from anthropic.types import OutputConfigParam
 from pydantic import BaseModel
 
 from blue_chatbot.configs.core import config
-from blue_chatbot.services.model import (
+from blue_chatbot.services.llm import (
     Message,
-    ModelRequestError,
-    ModelRateLimitError,
-    ModelUnreachableError,
-    ModelUpstreamError,
+    LLMRequestError,
+    LLMRateLimitError,
+    LLMUnreachableError,
+    LLMUpstreamError,
 )
 
 logger = logging.getLogger(__name__)
@@ -27,7 +27,7 @@ def _output_config() -> OutputConfigParam | anthropic.Omit:
     return {"effort": config.effort}
 
 
-class AnthropicModelClient:
+class AnthropicLLM:
     def __init__(self, client: anthropic.Anthropic):
         self._client = client
 
@@ -46,13 +46,13 @@ class AnthropicModelClient:
             )
         except anthropic.RateLimitError as exc:
             retry_after = int(exc.response.headers.get("retry-after", "60"))
-            raise ModelRateLimitError(retry_after) from exc
+            raise LLMRateLimitError(retry_after) from exc
         except (anthropic.APIConnectionError, anthropic.APITimeoutError) as exc:
-            raise ModelUnreachableError(str(exc)) from exc
+            raise LLMUnreachableError(str(exc)) from exc
         except anthropic.APIStatusError as exc:
             if exc.status_code >= 500:
-                raise ModelUpstreamError(str(exc)) from exc
-            raise ModelRequestError(str(exc)) from exc
+                raise LLMUpstreamError(str(exc)) from exc
+            raise LLMRequestError(str(exc)) from exc
 
         if message.stop_reason == "refusal":
             return None
@@ -64,9 +64,9 @@ class AnthropicModelClient:
         return message.parsed_output
 
 
-def build_from_config() -> AnthropicModelClient:
+def build_from_config() -> AnthropicLLM:
     """설정으로 SDK 클라이언트를 만들어 경계 구현체에 싼다."""
     key = config.anthropic_api_key
-    return AnthropicModelClient(
+    return AnthropicLLM(
         anthropic.Anthropic(api_key=key.get_secret_value() if key else None)
     )

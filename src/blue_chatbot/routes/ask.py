@@ -7,13 +7,13 @@ from pydantic import BaseModel, StringConstraints
 from blue_chatbot.routes.dependencies import get_faq, get_model
 from blue_chatbot.services import ask
 from blue_chatbot.services.faq import FaqEntry
-from blue_chatbot.services.model import (
+from blue_chatbot.services.llm import (
     Message,
-    ModelClient,
-    ModelRequestError,
-    ModelRateLimitError,
-    ModelUnreachableError,
-    ModelUpstreamError,
+    LLMModel,
+    LLMRequestError,
+    LLMRateLimitError,
+    LLMUnreachableError,
+    LLMUpstreamError,
 )
 
 logger = logging.getLogger(__name__)
@@ -29,27 +29,27 @@ class AskRequest(BaseModel):
 def post_ask(
     ask_request: AskRequest,
     entries: list[FaqEntry] = Depends(get_faq),
-    model: ModelClient = Depends(get_model),
+    model: LLMModel = Depends(get_model),
 ) -> ask.Answer:
     messages = [Message(role="user", content=ask_request.question)]
     try:
         return ask.answer(model, entries, messages)
-    except ModelRateLimitError as exc:
+    except LLMRateLimitError as exc:
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
             detail="요청이 많습니다. 잠시 후 다시 시도해 주세요.",
             headers={"retry-after": str(exc.retry_after)},
         ) from exc
-    except ModelUnreachableError as exc:
+    except LLMUnreachableError as exc:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="일시적으로 응답할 수 없습니다.",
         ) from exc
-    except ModelUpstreamError as exc:
+    except LLMUpstreamError as exc:
         raise HTTPException(
             status_code=status.HTTP_502_BAD_GATEWAY,
             detail="서버 오류입니다.",
         ) from exc
-    except ModelRequestError as exc:
+    except LLMRequestError as exc:
         logger.error("모델 호출 실패", exc_info=exc)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR) from exc

@@ -15,11 +15,11 @@ class Message(BaseModel):
     content: str
 
 
-class ModelError(Exception):
+class LLMError(Exception):
     """모델 호출 실패."""
 
 
-class ModelRateLimitError(ModelError):
+class LLMRateLimitError(LLMError):
     """요청량을 초과했다. retry_after 뒤에 다시 시도할 수 있다."""
 
     def __init__(self, retry_after: int):
@@ -27,22 +27,22 @@ class ModelRateLimitError(ModelError):
         super().__init__(f"요청량 초과. {retry_after}초 후 재시도")
 
 
-class ModelUnreachableError(ModelError):
+class LLMUnreachableError(LLMError):
     """모델에 닿지 못했다. 연결 실패나 타임아웃. 재시도할 수 있다."""
 
 
-class ModelUpstreamError(ModelError):
+class LLMUpstreamError(LLMError):
     """모델에 닿았지만 제공자 쪽에서 실패했다."""
 
 
-class ModelRequestError(ModelError):
+class LLMRequestError(LLMError):
     """설정이나 요청이 잘못됐다. 그대로 재시도해도 소용없다."""
 
 
 T = TypeVar("T", bound=BaseModel)
 
 
-class ModelClient(Protocol):
+class LLMModel(Protocol):
     """앱이 모델에게 요구하는 전부."""
 
     def generate(

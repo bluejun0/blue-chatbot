@@ -1,6 +1,6 @@
 from blue_chatbot.services.ask import Answer, _validate_answer, answer
 from blue_chatbot.services.faq import FaqEntry
-from blue_chatbot.services.model import Message
+from blue_chatbot.services.llm import Message
 
 FAQS = [
     FaqEntry(id="refund", question="환불 되나요?", answer="7일 이내 가능합니다."),
