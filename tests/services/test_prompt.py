@@ -7,7 +7,7 @@ FAQS = [
 ]
 
 
-def test_모든_항목이_프롬프트에_포함된다():
+def test_모든_항목이_프롬프트에_포함된다() -> None:
     system = build_prompt_system(FAQS)
 
     for faq in FAQS:
@@ -16,21 +16,21 @@ def test_모든_항목이_프롬프트에_포함된다():
         assert faq.answer in system
 
 
-def test_같은_입력이면_같은_출력이다():
+def test_같은_입력이면_같은_출력이다() -> None:
     assert build_prompt_system(FAQS) == build_prompt_system(FAQS)
 
 
-def test_matched_id_규칙이_들어간다():
+def test_matched_id_규칙이_들어간다() -> None:
     assert "matched_id" in build_prompt_system(FAQS)
 
 
-def test_항목_순서가_보존된다():
+def test_항목_순서가_보존된다() -> None:
     system = build_prompt_system(FAQS)
 
     assert system.index("refund") < system.index("hours")
 
 
-def test_빈_FAQ면_지시문만_남는다():
+def test_빈_FAQ면_지시문만_남는다() -> None:
     system = build_prompt_system([])
 
     assert system

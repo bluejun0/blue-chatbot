@@ -9,44 +9,43 @@ from pydantic import BaseModel
 
 
 class Message(BaseModel):
-    """대화 한 줄. 제공자와 무관한 형태로 보관한다."""
+    """채팅 메시지"""
 
     role: Literal["user", "assistant"]
     content: str
 
 
-class LLMError(Exception):
-    """모델 호출 실패."""
+class LLMClientError(Exception):
+    """LLM 에러"""
 
 
-class LLMRateLimitError(LLMError):
-    """요청량을 초과했다. retry_after 뒤에 다시 시도할 수 있다."""
+class LLMClientRateLimitError(LLMClientError):
+    """사용량 초과 오류"""
 
     def __init__(self, retry_after: int):
         self.retry_after = retry_after
         super().__init__(f"요청량 초과. {retry_after}초 후 재시도")
 
 
-class LLMUnreachableError(LLMError):
-    """모델에 닿지 못했다. 연결 실패나 타임아웃. 재시도할 수 있다."""
+class LLMClientUnreachableError(LLMClientError):
+    """LLM 연결 관련 오류"""
 
 
-class LLMUpstreamError(LLMError):
-    """모델에 닿았지만 제공자 쪽에서 실패했다."""
+class LLMClientVendorError(LLMClientError):
+    """LLM api 서버 관련 오류"""
 
-
-class LLMRequestError(LLMError):
-    """설정이나 요청이 잘못됐다. 그대로 재시도해도 소용없다."""
+class LLMClientRequestError(LLMClientError):
+    """LLM 요청 오류"""
+    ...
 
 
 T = TypeVar("T", bound=BaseModel)
 
 
-class LLMModel(Protocol):
-    """앱이 모델에게 요구하는 전부."""
+class LLMClient(Protocol):
+    """LLM 클라이언트"""
 
     def generate(
         self, *, system: str, messages: list[Message], output_format: type[T]
     ) -> T | None:
-        """구조화된 답을 받아낸다. 쓸 만한 출력을 못 받으면 None."""
         ...

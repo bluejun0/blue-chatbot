@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 from blue_chatbot.services.faq import FaqEntry
-from blue_chatbot.services.llm import Message, LLMModel
+from blue_chatbot.services.llm import Message, LLMClient
 from blue_chatbot.services.prompt import build_prompt_system
 
 
@@ -23,7 +23,7 @@ def _validate_answer(raw: Answer, faq: list[FaqEntry]) -> Answer:
 
 
 def answer(
-    model: LLMModel, faqs: list[FaqEntry], messages: list[Message]
+    model: LLMClient, faqs: list[FaqEntry], messages: list[Message]
 ) -> Answer:
     """FAQ를 근거로 답한다. 근거가 없으면 고정 문구로 대체한다."""
     raw = model.generate(

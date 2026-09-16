@@ -9,11 +9,11 @@ from blue_chatbot.services import ask
 from blue_chatbot.services.faq import FaqEntry
 from blue_chatbot.services.llm import (
     Message,
-    LLMModel,
-    LLMRequestError,
-    LLMRateLimitError,
-    LLMUnreachableError,
-    LLMUpstreamError,
+    LLMClient,
+    LLMClientRequestError,
+    LLMClientRateLimitError,
+    LLMClientUnreachableError,
+    LLMClientVendorError,
 )
 
 logger = logging.getLogger(__name__)
@@ -29,27 +29,27 @@ class AskRequest(BaseModel):
 def post_ask(
     ask_request: AskRequest,
     entries: list[FaqEntry] = Depends(get_faq),
-    model: LLMModel = Depends(get_model),
+    model: LLMClient = Depends(get_model),
 ) -> ask.Answer:
     messages = [Message(role="user", content=ask_request.question)]
     try:
         return ask.answer(model, entries, messages)
-    except LLMRateLimitError as exc:
+    except LLMClientRateLimitError as exc:
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
             detail="요청이 많습니다. 잠시 후 다시 시도해 주세요.",
             headers={"retry-after": str(exc.retry_after)},
         ) from exc
-    except LLMUnreachableError as exc:
+    except LLMClientUnreachableError as exc:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="일시적으로 응답할 수 없습니다.",
         ) from exc
-    except LLMUpstreamError as exc:
+    except LLMClientVendorError as exc:
         raise HTTPException(
             status_code=status.HTTP_502_BAD_GATEWAY,
             detail="서버 오류입니다.",
         ) from exc
-    except LLMRequestError as exc:
+    except LLMClientRequestError as exc:
         logger.error("모델 호출 실패", exc_info=exc)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR) from exc
