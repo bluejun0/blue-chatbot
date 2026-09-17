@@ -1,16 +1,13 @@
-from fastapi import Request
-
 from blue_chatbot.llm import anthropic_llm
+from blue_chatbot.services import faq
 from blue_chatbot.services.faq import FaqEntry
 from blue_chatbot.services.llm import LLMClient
 
 _llm_client: LLMClient | None = None
 
 
-def get_faq(request: Request) -> list[FaqEntry]:
-    # app.state는 Any라 반환 전에 타입을 고정한다.
-    entries: list[FaqEntry] = request.app.state.faq
-    return entries
+def get_faq() -> list[FaqEntry]:
+    return faq.entries
 
 
 def get_llm_client() -> LLMClient:
