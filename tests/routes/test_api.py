@@ -11,7 +11,7 @@ from fastapi.testclient import TestClient
 from pydantic import BaseModel
 
 from blue_chatbot.main import app
-from blue_chatbot.routes.dependencies import get_faq, get_model
+from blue_chatbot.routes.dependencies import get_faq, get_llm_client
 from blue_chatbot.services.ask import Answer
 from blue_chatbot.services.faq import FaqEntry
 from blue_chatbot.services.llm import (
@@ -53,7 +53,7 @@ def client() -> Iterator[TestClient]:
 
 
 def use(fake: FakeLLMClient) -> None:
-    app.dependency_overrides[get_model] = lambda: fake
+    app.dependency_overrides[get_llm_client] = lambda: fake
 
 
 def test_health가_faq_수를_알려준다(client: TestClient) -> None:

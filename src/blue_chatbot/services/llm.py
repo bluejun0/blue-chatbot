@@ -1,7 +1,4 @@
-"""모델 호출 경계.
-
-앱이 모델에게 필요로 하는 것만 정의한다. 특정 제공자의 SDK를 알지 않는다.
-"""
+"""LLM 관련 예외 및 클라이언트 API 인터페이스"""
 
 from typing import Literal, Protocol, TypeVar
 
@@ -36,7 +33,6 @@ class LLMClientVendorError(LLMClientError):
 
 class LLMClientRequestError(LLMClientError):
     """LLM 요청 오류"""
-    ...
 
 
 T = TypeVar("T", bound=BaseModel)

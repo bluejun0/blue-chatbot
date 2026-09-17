@@ -4,7 +4,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, StringConstraints
 
-from blue_chatbot.routes.dependencies import get_faq, get_model
+from blue_chatbot.routes.dependencies import get_faq, get_llm_client
 from blue_chatbot.services import ask
 from blue_chatbot.services.faq import FaqEntry
 from blue_chatbot.services.llm import (
@@ -29,11 +29,11 @@ class AskRequest(BaseModel):
 def post_ask(
     ask_request: AskRequest,
     entries: list[FaqEntry] = Depends(get_faq),
-    model: LLMClient = Depends(get_model),
+    llm_client: LLMClient = Depends(get_llm_client),
 ) -> ask.Answer:
     messages = [Message(role="user", content=ask_request.question)]
     try:
-        return ask.answer(model, entries, messages)
+        return ask.answer(llm_client, entries, messages)
     except LLMClientRateLimitError as exc:
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
