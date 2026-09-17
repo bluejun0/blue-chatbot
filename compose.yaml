@@ -8,9 +8,29 @@ services:
     environment:
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
       FAQ_PATH: ${FAQ_PATH:-data/faq.yaml}
+      DATABASE_URL: mysql+pymysql://${MARIADB_USER:-admin}:${MARIADB_PASSWORD:-1234}@mariadb:3306/blue_chatbot
+    depends_on:
+      mariadb:
+        condition: service_healthy
     command: uvicorn blue_chatbot.main:app --host 0.0.0.0 --port 8003 --reload
-    networks: [default, coursemos-net]
 
-networks:
-  coursemos-net:
-    external: true
+  mariadb:
+    image: mariadb:12.3
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-root}
+      MARIADB_DATABASE: blue_chatbot
+      MARIADB_USER: ${MARIADB_USER:-admin}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-1234}
+    ports:
+      # 호스트에서 접속할 때. 3307은 다른 MySQL 컨테이너가 쓴다.
+      - "3308:3306"
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+volumes:
+  mariadb-data:
