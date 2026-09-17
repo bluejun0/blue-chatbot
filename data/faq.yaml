@@ -1,126 +1,141 @@
-- id: lunch-time
-  question: 점심 시간이 어떻게 되나요?
-  answer: 11시 50분 부터 13시까지 입니다.
-- id: business-time
-  question: 근무 시간이 어떻게 되나요?
-  answer: 평일 09:00~18:00이며 주말과 공휴일은 휴무입니다.
-- id: password-reset
-  question: 비밀번호를 잊어버렸어요.
-  answer: iwork 개발자 분들께 문의해주세요.
-- id: annual-leave-request
-  question: 연차는 어떻게 신청하나요?
-  answer: 네이버 웍스에서 신청해주세요.
-- id: annual-leave-count
-  question: 연차가 며칠 남았는지 어디서 보나요?
-  answer: 네이버 나의 연차 화면에서 확인하실 수 있습니다.
-- id: half-day-leave
-  question: 반차도 쓸 수 있나요?
-  answer: 오전 반차와 오후 반차 모두 가능하며 연차 0.5일이 차감됩니다.
-- id: portal-what
-  question: blue-iWorks 가 뭐예요?
-  answer: Bluesoft 사내 업무 포털입니다. 로그인 한 번으로 BlueBooks, Coursemos WorkHub, DTI 발표, BlueLearn, Coursemos EnvHub, MoodleUp? 을 모두 사용할 수 있습니다.
-- id: portal-services
-  question: 포털에서 쓸 수 있는 시스템이 뭐가 있나요?
-  answer: 대시보드에 여섯 개가 있습니다. BlueBooks(도서구매신청), Coursemos WorkHub(업무현황판), DTI 발표(매거진 발표), BlueLearn(강의 수강료 지원), Coursemos EnvHub(대학 접속정보), MoodleUp?(무들 동향)입니다.
-- id: portal-login
-  question: 포털 로그인은 어떻게 하나요?
-  answer: 회사 이메일과 비밀번호로 로그인합니다. 이메일이 유일한 식별자이고, 계정은 사내 인원 명단으로 미리 만들어져 있어 별도 회원가입은 없습니다.
-- id: portal-initial-password
-  question: 초기 비밀번호가 뭐예요?
-  answer: blue$123 입니다. 초기 비밀번호를 바꾸기 전에는 로그인 직후 마이페이지 화면에 고정되어 다른 화면을 쓸 수 없으니 먼저 변경해 주세요.
-- id: portal-password-change
-  question: 비밀번호를 바꾸고 싶어요.
-  answer: 마이페이지에서 수정을 누르고 새 비밀번호 칸에 입력한 뒤 저장하면 됩니다. 비워 두면 기존 비밀번호가 그대로 유지됩니다.
-- id: portal-auto-login
-  question: 자동 로그인은 얼마나 유지되나요?
-  answer: 로그인 화면에서 자동 로그인을 체크하면 30일 동안 유지되고 방문할 때마다 기간이 다시 늘어납니다. 체크하지 않으면 브라우저를 닫을 때 로그아웃됩니다.
-- id: portal-save-id
-  question: 아이디 저장과 자동 로그인은 뭐가 다른가요?
-  answer: 아이디 저장은 로그인 화면에 이메일만 미리 채워 주는 기능이고, 로그인 상태를 유지하는 것은 자동 로그인입니다.
-- id: portal-mypage
-  question: 내 정보는 어디서 바꾸나요?
-  answer: 우측 상단 사용자 메뉴의 마이페이지에서 이름, 이메일, 고유 색상, 비밀번호, 슬랙 연동 토큰을 바꿀 수 있습니다. 수정 버튼을 눌러야 입력칸이 열립니다.
-- id: portal-color
-  question: 고유 색상은 어디에 쓰이나요?
-  answer: 화면에 보이는 내 아바타와 뱃지 색으로 쓰입니다. 마이페이지에서 색상표에서 고르거나 직접 지정할 수 있습니다.
-- id: portal-sso
-  question: 시스템마다 따로 로그인해야 하나요?
-  answer: 아니요. 포털에 한 번 로그인하면 대시보드의 모든 시스템이 같은 로그인으로 연결됩니다.
-- id: slack-token-why
-  question: 슬랙 연동 토큰은 왜 등록해야 하나요?
-  answer: 업무현황판이 본인 슬랙 계정으로 요청 목록을 읽어오기 때문입니다. 토큰이 없으면 업무현황판에 들어갈 때 마이페이지로 돌아가 등록을 안내합니다.
-- id: slack-token-where
-  question: 슬랙 토큰은 어디에 등록하나요?
-  answer: 마이페이지의 슬랙 연동 토큰 칸에 본인 토큰을 붙여넣고 저장합니다. 저장 후에는 화면에 원문이 다시 표시되지 않습니다.
-- id: slack-token-security
-  question: 슬랙 토큰이 유출된 것 같아요.
-  answer: 즉시 슬랙에서 토큰을 재발급하고 마이페이지에 새 토큰으로 다시 저장해 주세요. 토큰은 개인 민감정보라 본인만 입력하고 수정합니다.
-- id: slack-token-scope
-  question: 슬랙 토큰이 없으면 아무것도 못 쓰나요?
-  answer: 업무현황판만 막힙니다. BlueBooks 를 비롯한 나머지 시스템은 토큰 없이도 사용할 수 있습니다.
-- id: workhub-what
-  question: Coursemos WorkHub 는 뭐 하는 곳이에요?
-  answer: 슬랙으로 들어온 유지보수 요청 목록을 한 화면에서 확인하고 관리하는 업무현황판입니다.
-- id: workhub-features
-  question: 업무현황판에 어떤 기능이 있나요?
-  answer: 요청 목록과 댓글, 담당자 지정, 난이도 분석, 카테고리 분석, 유사 요청 찾기, 대학 사이트 관리, Gmail 뷰어가 있습니다.
-- id: books-what
-  question: BlueBooks 는 어떤 서비스예요?
-  answer: 읽고 싶은 책을 신청하고 처리 현황을 확인하는 도서구매신청 시스템입니다.
-- id: books-applicant
-  question: 다른 사람 이름으로 도서를 신청할 수 있나요?
-  answer: 아니요. 신청자는 항상 로그인한 본인으로 기록됩니다.
-- id: books-edit
-  question: 신청한 도서를 수정하거나 취소할 수 있나요?
-  answer: 본인이 신청한 건은 수정하고 삭제할 수 있습니다. 완료 처리는 관리자만 할 수 있습니다.
-- id: magazine-what
-  question: DTI 발표는 뭐예요?
-  answer: DI, MIT Technology Review 같은 매거진 아티클을 읽고 발표해 지식을 공유하는 활동입니다. 주제 목록과 발표 현황을 화면에서 관리합니다.
-- id: magazine-claim
-  question: 발표 주제를 직접 고를 수 있나요?
-  answer: 네. 미지정 주제는 선점해서 직접 가져갈 수 있습니다. 이미 발표가 끝났거나 숨김 또는 보관된 주제는 선점할 수 없습니다.
-- id: magazine-status
-  question: 발표 주제는 어떤 단계로 진행되나요?
-  answer: 미지정에서 발표예정, 자료준비 완료, 발표완료 순으로 진행됩니다. 발표자가 정해지면 발표예정이고 발표일이 기록되면 발표완료입니다.
-- id: magazine-material
-  question: 발표 자료는 어떻게 올리나요?
-  answer: 주제 상세 화면에서 파일이나 링크 중 하나를 올립니다. 주제당 자료는 하나이며 발표자 본인이나 관리자만 등록할 수 있습니다.
-- id: magazine-kind
-  question: 발표 구분은 뭐가 있나요?
-  answer: 필수, 권장, 일반 세 가지입니다.
-- id: magazine-cancel
-  question: 선점한 주제를 취소할 수 있나요?
-  answer: 네. 선점 취소와 발표 예정일 변경은 본인 또는 관리자가 할 수 있습니다.
-- id: bluelearn-what
-  question: BlueLearn 은 뭐 하는 서비스예요?
-  answer: 역량 강화를 위한 외부 강의를 신청하고 수강료를 지원받는 시스템입니다.
-- id: bluelearn-flow
-  question: 강의 신청은 어떤 순서로 진행되나요?
-  answer: 수강승인요청, 수강승인, 수강료청구, 청구승인, 환급완료 순으로 진행됩니다. 승인되지 않으면 수강반려나 청구반려로 처리됩니다.
-- id: bluelearn-refund-target
-  question: 모든 강의가 수강료 환급 대상인가요?
-  answer: 아니요. 무료 강의와 회사 계정으로 결제한 강의는 환급 대상이 아닙니다. 회사 계정 건은 환급불필요로 종결됩니다.
-- id: bluelearn-refund-amount
-  question: 수강료는 얼마까지 지원되나요?
-  answer: 건당 상한과 연간 한도는 관리자가 정책 화면에서 설정한 값에 따릅니다. 신청 화면에서 예상 환급액을 확인할 수 있고, 상한은 신청 시점 값으로 고정됩니다.
-- id: bluelearn-cert
-  question: 이수증은 언제 내야 하나요?
-  answer: 수강을 마친 뒤 수강료를 청구할 때 이수증을 올립니다. 올린 파일은 주소로 직접 열 수 없게 보호됩니다.
-- id: envhub-what
-  question: Coursemos EnvHub 는 뭐예요?
-  answer: 대학별 svn·git 주소, 사이트 로그인, 개발·운영·학사 DB, plink 터널링, 배포 방법을 찾아 클립보드로 복사하는 화면입니다.
-- id: envhub-school-version
-  question: 같은 대학이 여러 개로 보여요.
-  answer: 학교는 이름과 버전으로 구분합니다. 같은 대학이라도 버전이 다르면 서버와 저장소, 계정이 전부 다른 별개 사이트라 따로 관리합니다.
-- id: moodleup-what
-  question: MoodleUp? 은 뭐 하는 곳이에요?
-  answer: 무들의 PAG 코스, 트래커, 릴리스, 개발 문서 변화를 모아 코스모스 관점으로 요약해 주는 주간 리포트 화면입니다.
-- id: moodleup-when
-  question: MoodleUp? 리포트는 언제 갱신되나요?
-  answer: 주 1회 월요일 오전 6시에 자동으로 수집하고 요약합니다. 화면에서 지금 다시 가져오기를 눌러 직접 갱신할 수도 있습니다.
-- id: chatbot-scope
-  question: 이 챗봇은 무엇을 답할 수 있나요?
-  answer: 등록된 FAQ를 근거로만 답합니다. 근거가 없는 질문에는 답을 지어내지 않고 알맞은 대답을 찾을 수 없다고 안내합니다.
-- id: chatbot-ask-more
-  question: 챗봇이 모르는 걸 물어보고 싶어요.
-  answer: FAQ에 없는 내용은 iwork 개발자에게 문의해 주세요. 자주 나오는 질문은 FAQ에 추가할 수 있습니다.
+- id: workhub-status-list
+  question: 요청은 어떤 상태로 관리되나요?
+  answer: 등록, 시작 전, 공수산정요청, 진행중, 보류, 확인요청(개발서버반영), 확인요청(검토완료), 확인요청(운영서버반영), 운영배포요청, 재확인필요, 처리불가, 완료를 사용합니다.
+- id: workhub-priority-list
+  question: 요청 우선순위는 어떻게 구분하나요?
+  answer: 일반, 긴급, 중요 세 가지입니다.
+- id: workhub-board
+  question: 업무현황판 목록이 두 개로 나뉘어 있어요.
+  answer: 블루소프트와 와이오즈 두 리스트로 구분해 관리합니다.
+- id: workhub-team-list
+  question: 개발담당팀에는 어떤 값이 있나요?
+  answer: 블루소프트, 시스템개발, 달빛소프트, 미지정과 W > B, B > W 를 사용합니다. 팀이 지정되지 않은 요청도 있습니다.
+- id: workhub-ai-difficulty
+  question: 난이도 분석은 어떻게 표시되나요?
+  answer: 별 1개에서 5개까지 난이도를 매기고 그렇게 판단한 근거를 함께 보여줍니다. 판정 신뢰도는 high, medium, low 로 구분합니다.
+- id: workhub-assignee
+  question: 요청 담당자는 어떻게 정해지나요?
+  answer: 요청마다 담당자를 지정할 수 있고 누가 언제 배정했는지 함께 기록됩니다.
+- id: workhub-pin-hide
+  question: 특정 요청을 위로 올리거나 목록에서 빼둘 수 있나요?
+  answer: 고정과 숨김을 사용할 수 있습니다. 둘 다 본인 화면에만 적용되고 다른 사람 목록에는 영향을 주지 않습니다.
+- id: workhub-read
+  question: 읽은 요청과 안 읽은 요청이 구분되나요?
+  answer: 네. 읽은 시점이 사람별로 기록되어 본인 기준으로 구분됩니다.
+- id: workhub-filter-preset
+  question: 자주 쓰는 필터를 저장해 둘 수 있나요?
+  answer: 네. 필터와 화면 설정을 사람별로 저장해 두고 다시 불러 쓸 수 있습니다.
+- id: workhub-archived
+  question: 보관된 요청은 어떻게 되나요?
+  answer: 보관 표시가 붙어 기본 목록과 분리됩니다. 삭제되는 것은 아니라 내용은 그대로 남습니다.
+- id: workhub-dates
+  question: 요청에는 어떤 날짜가 기록되나요?
+  answer: 요청일과 완료예정일, 완료일이 기록됩니다. 완료예정일은 정해지지 않은 요청도 있습니다.
+- id: workhub-attachment
+  question: 슬랙에 올린 첨부파일도 업무현황판에서 볼 수 있나요?
+  answer: 네. 요청에 달린 첨부파일 목록이 함께 보관되어 화면에서 확인할 수 있습니다.
+- id: workhub-local-edit
+  question: 업무현황판에서 고친 내용이 슬랙 동기화 때 지워지지 않나요?
+  answer: 지워지지 않습니다. 화면에서 고친 요청은 따로 표시해 두고 다시 동기화할 때 고친 내용을 유지합니다. 마지막 수정자와 수정 시각도 남습니다.
+- id: envhub-versions
+  question: EnvHub에는 어떤 버전이 등록되어 있나요?
+  answer: 2.9, 3.2, 3.5, 3.9, 4.5 버전이 등록되어 있습니다. 버전이 아직 비어 있는 사이트도 있습니다.
+- id: envhub-vpn
+  question: 대학에 접속하려면 VPN을 꼭 써야 하나요?
+  answer: 대학마다 다릅니다. HIWARE, Arcon, FortiClient, WinNGS, SecuwaySSL, Citrix 같은 접근제어 프로그램이 등록되어 있고 두 가지를 함께 쓰는 곳도 있습니다. VPN 칸이 비어 있으면 별도로 실행할 것이 없다는 뜻입니다.
+- id: envhub-repo
+  question: 대학 소스 저장소는 svn인가요 git인가요?
+  answer: 대부분 svn이고 일부는 git입니다. EnvHub의 저장소 주소 칸에서 대학별로 확인할 수 있습니다.
+- id: envhub-deploy
+  question: 대학별 배포 방법은 어디서 보나요?
+  answer: EnvHub의 배포 방법 칸에 대학별로 적혀 있습니다. 주의할 점은 비고 칸에 함께 기록합니다.
+- id: envhub-inactive
+  question: 목록에 안 보이는 대학이 있어요.
+  answer: 비활성으로 처리된 사이트는 목록에서 빠집니다. 기록 자체는 지우지 않고 남겨 둡니다.
+- id: envhub-open-date
+  question: 그 대학을 언제부터 맡았는지 알 수 있나요?
+  answer: 사업시작 또는 최초 운영오픈 시점이 대학별로 기록되어 있습니다.
+- id: magazine-fields
+  question: 발표 분야는 어떻게 나뉘나요?
+  answer: UI/UX, Marketing, Trend, AX, Etc 다섯 가지입니다.
+- id: magazine-magazines
+  question: 어떤 매거진을 다루나요?
+  answer: DI와 MIT Technology Review를 주로 다루고 그 밖의 출처는 Etc로 묶습니다. 주제마다 권호와 페이지, 발행 연도를 함께 기록합니다.
+- id: magazine-teams
+  question: 발표 주제에 팀이 붙어 있던데요.
+  answer: LAB, SQUARE, APP 팀으로 구분합니다. 팀이 지정되지 않은 주제도 있습니다.
+- id: magazine-scan-slot
+  question: 주제에 올리는 자료 칸이 두 개로 보여요.
+  answer: 자료 칸과 스캔 칸이 따로 있습니다. 각 칸에는 파일이나 링크 중 하나를 올립니다.
+- id: magazine-hidden-topic
+  question: 주제 목록에 안 보이는 주제가 있어요.
+  answer: 구성원 화면에 노출하지 않도록 꺼 둔 주제이거나 보관 처리된 주제입니다. 두 경우 모두 선점할 수 없습니다.
+- id: magazine-related-topic
+  question: 비슷한 주제를 찾아볼 수 있나요?
+  answer: 네. 주제마다 연관된 다른 주제가 연결되어 있어 함께 살펴볼 수 있습니다.
+- id: magazine-keywords
+  question: 발표 주제는 어떻게 검색하나요?
+  answer: 주제마다 키워드가 함께 등록되어 있어 제목뿐 아니라 키워드로도 찾을 수 있습니다.
+- id: bluelearn-sites
+  question: 어떤 교육 플랫폼 강의를 신청할 수 있나요?
+  answer: 인프런과 패스트캠퍼스가 등록되어 있습니다.
+- id: bluelearn-category
+  question: 강의 분류는 어떻게 고르나요?
+  answer: 플랫폼별로 대분류와 중분류가 등록되어 있어 그중에서 고릅니다. 분류 목록은 플랫폼마다 다릅니다.
+- id: bluelearn-level
+  question: 강의 난이도는 어떻게 표시하나요?
+  answer: 초급, 중급, 고급으로 구분합니다.
+- id: bluelearn-account-type
+  question: 회사 계정으로 결제한 강의도 등록하나요?
+  answer: 네. 신청할 때 회사계정과 개인계정 중 하나를 고릅니다. 회사계정 건은 환급 대상이 아닙니다.
+- id: bluelearn-progress
+  question: 수강 진행 상태는 어떻게 관리하나요?
+  answer: 시작전, 진행중, 완료로 표시하고 마지막으로 상태를 바꾼 시각이 함께 기록됩니다.
+- id: bluelearn-rating
+  question: 들은 강의를 평가할 수 있나요?
+  answer: 강의 평가와 추천도를 각각 0.5점에서 5.0점까지 매기고 후기를 남길 수 있습니다. 입력하지 않으면 미입력으로 남고 0점으로 처리되지 않습니다.
+- id: bluelearn-free-vs-zero
+  question: 무료 강의와 수강료 0원은 같은 건가요?
+  answer: 다릅니다. 무료 강의는 따로 표시하고 수강료 금액과는 별개로 관리합니다.
+- id: bluelearn-policy-items
+  question: 수강료 지원 정책에서 정할 수 있는 게 뭔가요?
+  answer: 건당 상한을 두는 부분환급, 연간 환급 금액 한도, 연간 환급 건수 한도, 수강료 청구 기한 네 가지를 관리자가 각각 켜고 끄며 값을 정합니다.
+- id: bluelearn-history
+  question: 내 신청이 어떻게 처리됐는지 지나온 과정을 볼 수 있나요?
+  answer: 네. 상태가 바뀔 때마다 바뀐 상태와 처리한 사람, 시각이 남습니다. 반려 사유나 확정된 환급액도 함께 기록됩니다.
+- id: bluelearn-admin
+  question: BlueLearn 승인은 누가 하나요?
+  answer: 따로 지정된 BlueLearn 관리자가 승인과 반려, 환급 처리를 합니다.
+- id: bluelearn-cert-file
+  question: 올린 이수증 파일은 어떻게 보관되나요?
+  answer: 올린 원본 파일명과 서버에 저장된 파일명을 나눠서 보관하고, 누가 언제 올렸는지 함께 기록합니다.
+- id: bluelearn-catalog
+  question: 회사가 지정하거나 추천하는 강의도 있나요?
+  answer: 관리자가 필수 또는 추천 강의를 등록할 수 있습니다. 지정 사유와 이수 기한, 전사 대상인지 특정 대상자인지, 노출 기간을 함께 정합니다.
+- id: moodleup-sources
+  question: MoodleUp?은 어디서 정보를 모으나요?
+  answer: 무들 트래커, GitHub, moodle.com, 개발 문서 네 곳에서 모읍니다.
+- id: moodleup-item-kinds
+  question: 리포트에는 어떤 종류의 항목이 담기나요?
+  answer: 이슈, 릴리스, 소식, 개발 문서 변경이 담깁니다. 항목마다 원문 주소와 발행 시각이 함께 기록됩니다.
+- id: moodleup-impact
+  question: 항목마다 붙은 영향도는 뭔가요?
+  answer: 코스모스 관점에서 얼마나 중요한지를 고, 중, 저로 판정한 값이며 그렇게 본 근거가 함께 붙습니다. 판정되지 않은 항목도 있습니다.
+- id: moodleup-week
+  question: 리포트는 어떤 단위로 만들어지나요?
+  answer: 주 단위로 만들고 2026-W37 같은 ISO 주차로 구분합니다. 리포트마다 어느 기간을 다뤘는지 시작과 끝이 기록됩니다.
+- id: moodleup-run
+  question: 리포트가 몇 번 갱신됐는지 알 수 있나요?
+  answer: 네. 갱신할 때마다 실행 번호와 시각, 새로 들어온 항목 수가 남습니다. 자동 실행인지 화면에서 직접 실행한 것인지도 구분됩니다.
+- id: moodleup-status
+  question: 리포트 상태가 partial로 보여요.
+  answer: 일부 출처만 수집된 경우입니다. 모두 정상이면 ok, 수집에 실패하면 failed로 표시하고 어느 출처에서 무슨 일이 있었는지 함께 기록합니다.
+- id: moodleup-updates
+  question: 지난번에 본 다음에 뭐가 새로 들어왔는지 보고 싶어요.
+  answer: 마지막 갱신에서 새로 들어온 항목만 따로 요약해 보여줍니다. 리포트에서 눈여겨볼 항목은 따로 표시됩니다.
+- id: moodleup-note
+  question: 리포트에 메모를 남길 수 있나요?
+  answer: 요약 글에서 원하는 부분을 골라 형광펜을 칠하거나 북마크할 수 있고 색을 골라 메모를 붙일 수 있습니다. 누가 남긴 메모인지 함께 기록됩니다.
+- id: portal-token-storage
+  question: 등록한 슬랙 토큰은 안전하게 보관되나요?
+  answer: 암호화해서 보관하며 저장한 뒤에는 화면에 원문이 다시 표시되지 않습니다.
