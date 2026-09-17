@@ -7,10 +7,12 @@ from pathlib import Path
 
 import pytest
 
+from blue_chatbot.repositories.conversation import ConversationMessage
+from blue_chatbot.support import utc_now
 from blue_chatbot.llm.anthropic_llm import build_from_config
-from blue_chatbot.services.ask import Answer, answer
+from blue_chatbot.services.ask import LLMAnswer, answer
 from blue_chatbot.services.faq import FaqEntry, load
-from blue_chatbot.services.llm import LLMClient, Message
+from blue_chatbot.services.llm import LLMClient
 
 
 @pytest.fixture(scope="module")
@@ -23,8 +25,11 @@ def model() -> LLMClient:
     return build_from_config()
 
 
-def ask(model: LLMClient, faqs: list[FaqEntry], question: str) -> Answer:
-    return answer(model, faqs, [Message(role="user", content=question)])
+def ask(model: LLMClient, faqs: list[FaqEntry], question: str) -> LLMAnswer:
+    question_message = ConversationMessage(
+        conversation_id=0, role="user", content=question, created_at=utc_now()
+    )
+    return answer(model, faqs, [question_message])
 
 
 @pytest.mark.smoke

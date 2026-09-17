@@ -8,6 +8,7 @@ import httpx2 as httpx
 import pytest
 from pydantic import BaseModel
 
+from blue_chatbot.messages import Message
 from blue_chatbot.configs.core import config
 from blue_chatbot.llm.anthropic_llm import AnthropicLLMClient
 from blue_chatbot.services.llm import (
@@ -15,7 +16,6 @@ from blue_chatbot.services.llm import (
     LLMClientRequestError,
     LLMClientUnreachableError,
     LLMClientVendorError,
-    Message,
 )
 
 REQUEST = httpx.Request("POST", "https://api.anthropic.com/v1/messages")

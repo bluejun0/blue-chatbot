@@ -1,15 +1,10 @@
 """LLM 관련 예외 및 클라이언트 API 인터페이스"""
 
-from typing import Literal, Protocol, TypeVar
+from typing import Protocol, TypeVar
 
 from pydantic import BaseModel
 
-
-class Message(BaseModel):
-    """채팅 메시지"""
-
-    role: Literal["user", "assistant"]
-    content: str
+from blue_chatbot.messages import Message
 
 
 class LLMClientError(Exception):

@@ -7,9 +7,9 @@ import anthropic
 from anthropic.types import MessageParam, OutputConfigParam
 from pydantic import BaseModel
 
+from blue_chatbot.messages import Message
 from blue_chatbot.configs.core import config
 from blue_chatbot.services.llm import (
-    Message,
     LLMClientRequestError,
     LLMClientRateLimitError,
     LLMClientUnreachableError,
