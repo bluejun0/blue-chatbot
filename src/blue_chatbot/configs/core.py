@@ -18,7 +18,7 @@ class CoreConfig(BaseSettings):
     effort: Literal["low", "medium", "high", "xhigh", "max"] | None = "low"
 
     # FAQ
-    faq_path: Path = Path("data/faq.yaml")
+    faq_dir: Path = Path("data/faq")
 
     # 저장소
     database_url: SecretStr
