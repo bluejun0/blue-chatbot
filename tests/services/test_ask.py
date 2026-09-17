@@ -94,7 +94,7 @@ def test_FAQ를_시스템_프롬프트로_넘긴다() -> None:
     assert "refund" in client.calls[0]["system"]
 
 
-def test_발화_목록과_출력_형식을_그대로_넘긴다() -> None:
+def test_메시지_목록과_출력_형식을_그대로_넘긴다() -> None:
     client = FakeLLMClient(Answer(content="답", matched_id="refund"))
     messages = [
         Message(role="user", content="환불 되나요?"),
