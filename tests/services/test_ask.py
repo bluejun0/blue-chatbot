@@ -1,7 +1,4 @@
-"""FAQ 응답 도메인 테스트.
-
-구현체를 모른다. LLMClient 프로토콜을 만족하는 가짜 하나면 충분하다.
-"""
+"""FAQ를 근거로 답을 만들고 근거 없는 답을 걸러내는지 확인한다."""
 
 from typing import Any, TypeVar, cast
 
@@ -70,7 +67,7 @@ def test_존재하지_않는_matched_id면_거부한다() -> None:
     assert result.matched_id is None
 
 
-# --- answer: 경계 위에서의 동작 -------------------------------------------
+# --- answer: LLMClient를 통한 동작 ----------------------------------------
 
 
 def test_검증을_통과한_응답을_그대로_돌려준다() -> None:

@@ -1,8 +1,4 @@
-"""Anthropic 구현체 단위 테스트.
-
-SDK 예외를 앱 예외로 번역하는지, 설정을 요청에 반영하는지를 본다.
-경계 위에서 도는 코드는 이 파일을 보지 않는다.
-"""
+"""SDK 예외를 애플리케이션 예외로 변환하는지, 설정을 요청에 반영하는지 확인한다."""
 
 from types import SimpleNamespace
 from typing import Any

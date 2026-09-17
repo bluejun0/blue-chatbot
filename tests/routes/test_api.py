@@ -1,7 +1,4 @@
-"""HTTP 경계 테스트.
-
-앱 예외가 어떤 상태 코드로 내려가는지를 본다. SDK 예외는 여기까지 오지 않는다.
-"""
+"""라우트가 예외를 어떤 HTTP 상태 코드로 변환하는지 확인한다."""
 
 from collections.abc import Iterator
 from typing import Any, TypeVar, cast
@@ -107,7 +104,7 @@ def test_요청량_초과면_429다(client: TestClient) -> None:
     assert response.headers["retry-after"] == "30"
 
 
-def test_모델에_닿지_못하면_503이다(client: TestClient) -> None:
+def test_LLM에_접속하지_못하면_503이다(client: TestClient) -> None:
     use(FakeLLMClient(error=LLMClientUnreachableError("연결 실패")))
 
     assert client.post("/ask", json={"question": "환불 되나요?"}).status_code == 503
