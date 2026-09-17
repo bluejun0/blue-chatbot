@@ -1,3 +1,4 @@
+from datetime import timedelta
 from pathlib import Path
 from typing import Literal
 
@@ -21,6 +22,9 @@ class CoreConfig(BaseSettings):
 
     # 저장소
     database_url: SecretStr
+
+    # 대화
+    conversation_expires_after: timedelta = timedelta(minutes=30)
 
     @field_validator("effort", mode="before")
     @classmethod
