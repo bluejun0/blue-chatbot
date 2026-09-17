@@ -8,15 +8,15 @@ jobs:
   test:
     runs-on: ubuntu-latest
     services:
-      mysql:
-        image: mysql:8.0
+      mariadb:
+        image: mariadb:12.3
         env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: blue_chatbot
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: blue_chatbot
         ports:
           - 3306:3306
         options: >-
-          --health-cmd "mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-cmd "healthcheck.sh --connect --innodb_initialized"
           --health-interval 5s
           --health-timeout 3s
           --health-retries 12
