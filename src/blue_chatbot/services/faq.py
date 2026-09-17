@@ -3,6 +3,8 @@ from pathlib import Path
 
 import yaml
 
+from blue_chatbot.configs.core import config
+
 
 class FaqError(Exception):
     """FAQ 파일이 잘못되었을 때 발생한다."""
@@ -46,3 +48,6 @@ def load(path: Path) -> list[FaqEntry]:
                         )
 
     return list(entries.values())
+
+
+entries = load(config.faq_path)

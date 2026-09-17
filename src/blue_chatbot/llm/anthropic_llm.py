@@ -1,4 +1,4 @@
-"""Anthropic SDK로 모델 경계를 구현한다."""
+"""LLMClient의 Anthropic 구현. anthropic 패키지는 이 파일에서만 import한다."""
 
 import logging
 from typing import TypeVar

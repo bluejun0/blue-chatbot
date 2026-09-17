@@ -49,6 +49,7 @@ src/blue_chatbot/
 | `MAX_TOKENS` | `16000` | 응답 토큰 상한 |
 | `EFFORT` | `low` | 추론 깊이. 빈 값이면 파라미터를 보내지 않는다 |
 | `ANTHROPIC_API_KEY` | 없음 | Claude API 키 |
+| `DATABASE_URL` | 필수 | MySQL 접속 URL. `mysql+pymysql://사용자:비밀번호@호스트:3306/blue_chatbot` 형식 |
 
 `ANTHROPIC_API_KEY`는 넣으면 그 값으로 클라이언트를 만들고, 비워 두면
 Anthropic SDK가 환경변수와 `ant auth login` 프로필을 직접 읽는다.
