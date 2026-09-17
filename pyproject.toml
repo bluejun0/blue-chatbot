@@ -8,10 +8,14 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "alembic>=1.20.0",
     "anthropic>=1.4.0",
     "fastapi>=0.141.1",
     "pydantic-settings>=2.15.0",
+    "pymysql>=1.2.0",
     "pyyaml>=6.0.3",
+    "sqlalchemy>=2.0.54",
+    "sqlmodel>=0.0.42",
     "uvicorn>=0.52.4",
 ]
 
@@ -22,8 +26,15 @@ build-backend = "uv_build"
 [dependency-groups]
 dev = [
     "httpx>=0.28.1",
+    "mypy>=2.3.1",
     "pytest>=9.1.1",
+    "types-pyyaml>=6.0.12.20260906",
 ]
+
+[tool.mypy]
+strict = true
+plugins = ["pydantic.mypy"]
+files = ["src", "tests"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

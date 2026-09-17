@@ -11,7 +11,7 @@ def write(tmp_path: Path, text: str) -> Path:
     return path
 
 
-def test_정상_파일을_순서대로_읽는다(tmp_path):
+def test_정상_파일을_순서대로_읽는다(tmp_path: Path) -> None:
     path = write(tmp_path, """
 - id: a
   question: 질문 A
@@ -29,7 +29,7 @@ def test_정상_파일을_순서대로_읽는다(tmp_path):
     ]
 
 
-def test_id가_중복되면_실패한다(tmp_path):
+def test_id가_중복되면_실패한다(tmp_path: Path) -> None:
     path = write(tmp_path, """
 - id: a
   question: 질문 1
@@ -43,7 +43,7 @@ def test_id가_중복되면_실패한다(tmp_path):
         load(path)
 
 
-def test_id가_없으면_실패한다(tmp_path):
+def test_id가_없으면_실패한다(tmp_path: Path) -> None:
     path = write(tmp_path, """
 - question: 질문만 있다
   answer: 답변
@@ -53,7 +53,7 @@ def test_id가_없으면_실패한다(tmp_path):
         load(path)
 
 
-def test_answer가_없으면_실패한다(tmp_path):
+def test_answer가_없으면_실패한다(tmp_path: Path) -> None:
     path = write(tmp_path, """
 - id: a
   question: 질문
@@ -63,21 +63,21 @@ def test_answer가_없으면_실패한다(tmp_path):
         load(path)
 
 
-def test_빈_파일이면_실패한다(tmp_path):
+def test_빈_파일이면_실패한다(tmp_path: Path) -> None:
     path = write(tmp_path, "")
 
     with pytest.raises(FaqError, match="비어"):
         load(path)
 
 
-def test_최상위가_리스트가_아니면_실패한다(tmp_path):
+def test_최상위가_리스트가_아니면_실패한다(tmp_path: Path) -> None:
     path = write(tmp_path, "id: a\nquestion: q\nanswer: a\n")
 
     with pytest.raises(FaqError, match="목록"):
         load(path)
 
 
-def test_실제_샘플_파일이_로딩된다():
+def test_실제_샘플_파일이_로딩된다() -> None:
     entries = load(Path("data/faq.yaml"))
 
     assert len(entries) >= 1

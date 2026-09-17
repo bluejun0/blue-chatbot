@@ -1,3 +1,4 @@
+from datetime import timedelta
 from pathlib import Path
 from typing import Literal
 
@@ -8,16 +9,22 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class CoreConfig(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-    # Claude 환경변수
+    # Claude
     anthropic_api_key: SecretStr | None = None
-
-    faq_path: Path = Path("data/faq.yaml")
-
     claude_model: str = "claude-sonnet-5"
     max_tokens: int = 16000
     # Sonnet 4.5나 Haiku 4.5처럼 effort를 아예 받지 않는 모델이 있다.
     # 그런 모델로 바꿀 때는 비워 두면 파라미터를 보내지 않는다.
     effort: Literal["low", "medium", "high", "xhigh", "max"] | None = "low"
+
+    # FAQ
+    faq_path: Path = Path("data/faq.yaml")
+
+    # 저장소
+    database_url: SecretStr
+
+    # 대화
+    conversation_expires_after: timedelta = timedelta(minutes=30)
 
     @field_validator("effort", mode="before")
     @classmethod
