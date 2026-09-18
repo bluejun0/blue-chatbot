@@ -219,3 +219,6 @@ __marimo__/
 
 # 개인 요청 모음 (REST Client)
 .rest
+
+# 설계 과정 문서는 history 브랜치에 둔다 (docs/CONTRIBUTING.md 문서 규칙)
+docs/superpowers/
