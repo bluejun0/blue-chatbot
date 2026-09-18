@@ -1,9 +1,14 @@
 from blue_chatbot.services.faq import FaqEntry
-from blue_chatbot.services.prompt import build_prompt_system
+from blue_chatbot.services.prompt import INSTRUCTIONS, build_prompt_system
 
 FAQS = [
     FaqEntry(id="refund", question="환불 되나요?", answer="7일 이내 가능합니다."),
     FaqEntry(id="hours", question="운영 시간은?", answer="평일 09:00~18:00입니다."),
+]
+
+DOMAIN_FAQS = [
+    FaqEntry(id="refund", question="환불 되나요?", answer="7일 이내 가능합니다.", domain="books"),
+    FaqEntry(id="hours", question="운영 시간은?", answer="평일 09:00~18:00입니다.", domain="portal"),
 ]
 
 
@@ -35,3 +40,19 @@ def test_빈_FAQ면_지시문만_남는다() -> None:
 
     assert system
     assert "matched_id" in system
+
+
+def test_도메인이_이름과_함께_묶여_들어간다() -> None:
+    system = build_prompt_system(DOMAIN_FAQS)
+
+    assert "## books" in system
+    assert "## portal" in system
+    assert system.index("## books") < system.index("## portal")
+
+
+def test_도메인이_없으면_이름_줄_없이_들어간다() -> None:
+    system = build_prompt_system(FAQS)
+
+    body = system.removeprefix(INSTRUCTIONS)
+    assert [line for line in body.splitlines() if line.startswith("## ")] == []
+    assert "refund" in system

@@ -11,13 +11,13 @@ from blue_chatbot.repositories.conversation import ConversationMessage
 from blue_chatbot.support import utc_now
 from blue_chatbot.llm.anthropic_llm import build_from_config
 from blue_chatbot.services.ask import LLMAnswer, answer
-from blue_chatbot.services.faq import FaqEntry, load
+from blue_chatbot.services.faq import FaqEntry, load_domains
 from blue_chatbot.services.llm import LLMClient
 
 
 @pytest.fixture(scope="module")
 def faqs() -> list[FaqEntry]:
-    return load(Path("data/faq.yaml"))
+    return load_domains(Path("data/faq"))
 
 
 @pytest.fixture(scope="module")
@@ -34,9 +34,9 @@ def ask(model: LLMClient, faqs: list[FaqEntry], question: str) -> LLMAnswer:
 
 @pytest.mark.smoke
 def test_FAQ에_있는_질문에_근거를_밝히며_답한다(model: LLMClient, faqs: list[FaqEntry]) -> None:
-    result = ask(model, faqs, "점심 몇 시부터예요?")
+    result = ask(model, faqs, "요청 우선순위 어떻게 나뉘어요?")
 
-    assert result.matched_id == "lunch-time"
+    assert result.matched_id == "workhub-priority-list"
     assert result.content
 
 

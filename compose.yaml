@@ -7,7 +7,7 @@ services:
       - .:/app
     environment:
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
-      FAQ_PATH: ${FAQ_PATH:-data/faq.yaml}
+      FAQ_DIR: ${FAQ_DIR:-data/faq}
       DATABASE_URL: mysql+pymysql://${MARIADB_USER:-admin}:${MARIADB_PASSWORD:-1234}@mariadb:3306/blue_chatbot
     depends_on:
       mariadb:
